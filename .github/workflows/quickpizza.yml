@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v4.2.2
 
     - name: Install k6
       run: |
@@ -31,14 +31,14 @@ jobs:
       with:
         node-version: 18
 
-    - name: Install k6-html-reporter locally
-      run: npm install k6-html-reporter
+    - name: Install working CLI version of k6-html-reporter
+      run: npm install -g @danielschmid/k6-html-reporter
 
     - name: Run k6 tests and generate JSON
       run: k6 run --out json=report.json test-script.js
 
     - name: Generate HTML report
-      run: npx k6-html-reporter --json report.json --output report.html
+      run: k6-html-reporter --json report.json --output report.html
 
     - name: Upload HTML report
       uses: actions/upload-artifact@v4
