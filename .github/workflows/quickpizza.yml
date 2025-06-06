@@ -7,15 +7,15 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
+  workflow_dispatch:  
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4.2.2
+    - name: Checkout code
+      uses: actions/checkout@v3
 
     - name: Install k6
       run: |
@@ -26,22 +26,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y k6
 
-    - name: Install Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
-
-    - name: Install working CLI version of k6-html-reporter
-      run: npm install -g @danielschmid/k6-html-reporter
-
-    - name: Run k6 tests and generate JSON
-      run: k6 run --out json=report.json test-script.js
-
-    - name: Generate HTML report
-      run: k6-html-reporter --json report.json --output report.html
-
-    - name: Upload HTML report
-      uses: actions/upload-artifact@v4
-      with:
-        name: k6-html-report
-        path: report.html
+    - name: Run k6 tests
+      run: |
+        k6 run test-script.js
