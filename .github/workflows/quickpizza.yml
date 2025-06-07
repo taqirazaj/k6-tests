@@ -13,6 +13,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      K6_PROJECT_ID: ${{ secrets.K6_PROJECT_ID }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -26,7 +29,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y k6
 
-    - name: Run k6 tests
-      run: |
-        k6 run tests/login.js
-        k6 run tests/pizza.js
+    - name: Run k6 tests in cloud mode
+      run: k6 cloud tests/grafana.js
+      # The K6_PROJECT_ID env var will be automatically available to your test script as __ENV.K6_PROJECT_ID
