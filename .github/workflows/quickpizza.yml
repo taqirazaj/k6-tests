@@ -28,4 +28,5 @@ jobs:
 
     - name: Run k6 tests
       run: |
-        k6 run tests/test-script.js
+        k6 run tests/login.js
+        k6 run tests/pizza.js
