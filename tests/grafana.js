@@ -10,12 +10,13 @@ import { CONFIG } from "../env.js";
 
 export const options = {
   vus: 1,
-  duration: '3s',
+  duration: "3s",
   //Grafana Cloud integration
   cloud: {
-    projectID: CONFIG.projectId,  // use projectId from config file
-        name: 'k6- grafana'
-  }
+    projectID: __ENV.K6_PROJECT_ID,
+    // use projectId from config file
+    name: "k6- grafana",
+  },
 };
 
 // This runs once before the test begins, used for setup/login
