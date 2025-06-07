@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:  
+  workflow_dispatch:
 
 jobs:
   test:
@@ -17,18 +17,24 @@ jobs:
       K6_PROJECT_ID: ${{ secrets.K6_PROJECT_ID }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Install k6
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y gnupg software-properties-common
-        curl -fsSL https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
-        echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-        sudo apt-get update
-        sudo apt-get install -y k6
+      - name: Install k6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg software-properties-common
+          curl -fsSL https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install -y k6
 
-    - name: Run k6 tests in cloud mode
-      run: k6 cloud tests/grafana.js
-      # The K6_PROJECT_ID env var will be automatically available to your test script as __ENV.K6_PROJECT_ID
+      - name: Authenticate k6 Cloud CLI
+        env:
+          K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
+        run: |
+          k6 cloud login --token $K6_CLOUD_TOKEN
+
+      - name: Run k6 tests in cloud mode
+        run: k6 cloud tests/grafana.js
+        # The K6_PROJECT_ID env var will be automatically available to your test script as __ENV.K6_PROJECT_ID
