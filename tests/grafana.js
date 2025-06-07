@@ -6,7 +6,6 @@ import { loginPayload } from "../payload/loginPayload.js";
 import { postPizza } from "../apis/apiPizza.js";
 import { pizzaConfigPayload } from "../payload/pizzaConfigPayload.js";
 import { checkPizzaResponse } from "../utils/checksPizza.js";
-import { CONFIG } from "../env.js";
 
 export const options = {
   vus: 1,
